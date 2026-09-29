@@ -1,0 +1,132 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─────────────────────────────────────────────────────────────
+   الهوية اللونية — عدّل هنا لتغيير ألوان الموقع بالكامل
+   Dusty Rose #EADCD9 · Royal Burgundy #6E1B2E · Dark Wine #2E0D16 · Rose Gold #C08552
+   ولتغيير الخط: عدّل --font-body / --font-display (أو الخطوط في app/layout.tsx)
+   ───────────────────────────────────────────────────────────── */
+:root {
+  --ink: 11 9 24;        /* خلفية أساسية: كحلي داكن مائل للبنفسجي */
+  --night: 20 14 34;     /* سطوح وبطاقات */
+  --wine: 46 13 22;      /* Dark Wine */
+  --burgundy: 110 27 46; /* Royal Burgundy */
+  --gold: 192 133 82;    /* Rose Gold — لون التمييز */
+  --rose: 234 220 217;   /* Dusty Rose — النصوص الفاتحة */
+  --line: 234 220 217;   /* حدود (تُستخدم بشفافية) */
+  color-scheme: dark;
+}
+
+@layer base {
+  html, body { overflow-x: clip; }
+  html { scroll-behavior: smooth; -webkit-tap-highlight-color: transparent; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body {
+    @apply bg-ink font-sans text-rose antialiased;
+    background-image:
+      radial-gradient(1200px 600px at 85% -10%, rgb(var(--burgundy) / .28), transparent 60%),
+      radial-gradient(900px 500px at -10% 30%, rgb(var(--wine) / .55), transparent 60%);
+    background-attachment: fixed;
+  }
+  ::selection { background: rgb(var(--gold) / .35); color: white; }
+  :focus-visible { outline: 2px solid rgb(var(--gold)); outline-offset: 3px; border-radius: 6px; }
+  h1, h2, h3 { @apply font-display; text-wrap: balance; }
+  p { text-wrap: pretty; }
+  [id] { scroll-margin-top: 88px; }
+}
+
+@layer components {
+  .section { @apply relative py-20 md:py-28; }
+  .glass {
+    @apply rounded-3xl border border-line/10 bg-night/60 backdrop-blur-xl;
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / .04);
+  }
+  .auto-grid {
+    @apply grid gap-5;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 390px));
+    justify-content: center;
+  }
+  .card-hover { @apply transition duration-300 hover:-translate-y-1 hover:border-gold/40 hover:shadow-glow; }
+  .text-gradient {
+    background: linear-gradient(100deg, #f3e7e4 10%, rgb(var(--gold)) 55%, #e9c29c 90%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition
+      duration-200 active:scale-[.97] disabled:pointer-events-none disabled:opacity-50;
+  }
+  .btn-primary {
+    @apply btn text-ink;
+    background: linear-gradient(135deg, #e3b287, rgb(var(--gold)) 50%, #a86c3c);
+    box-shadow: 0 10px 30px -10px rgb(var(--gold) / .7);
+  }
+  .btn-primary:hover { filter: brightness(1.08); }
+  .btn-ghost { @apply btn border border-line/15 bg-white/[.03] text-rose hover:border-gold/50 hover:bg-white/[.06]; }
+  .chip { @apply inline-flex items-center gap-1.5 rounded-full border border-line/10 bg-white/[.04] px-3 py-1 text-xs text-rose/80; }
+  .eyebrow { @apply inline-flex items-center gap-2 text-sm font-medium tracking-wide text-gold; }
+  .eyebrow::before { content: ""; @apply h-px w-8 bg-gold/70; }
+  .field {
+    @apply w-full rounded-xl border border-line/15 bg-ink/60 px-4 py-3 text-sm text-rose placeholder:text-rose/40
+      outline-none transition focus:border-gold/60 focus:ring-2 focus:ring-gold/20;
+  }
+  .skeleton { @apply relative overflow-hidden rounded-2xl bg-white/[.05]; }
+  .skeleton::after {
+    content: ""; @apply absolute inset-0 animate-shimmer;
+    transform: translateX(100%);
+    background: linear-gradient(90deg, transparent, rgb(255 255 255 / .06), transparent);
+  }
+}
+
+/* خلفية زخرفية بحروف عربية خفيفة */
+.letters-bg {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Ctext x='20' y='50' font-size='34' fill='%23C08552' fill-opacity='.06' font-family='serif'%3E%D8%B6%3C/text%3E%3Ctext x='75' y='105' font-size='28' fill='%23EADCD9' fill-opacity='.04' font-family='serif'%3E%D8%B9%3C/text%3E%3C/svg%3E");
+}
+
+/* ── كتاب ثلاثي الأبعاد ── */
+.book3d { perspective: 1400px; }
+.book3d__inner {
+  position: relative; transform-style: preserve-3d;
+  transform: rotateY(-24deg) rotateX(4deg);
+  transition: transform .6s cubic-bezier(.2,.8,.2,1);
+}
+.book3d:hover .book3d__inner, .book3d:focus-within .book3d__inner { transform: rotateY(-8deg) rotateX(2deg) translateY(-6px); }
+.book3d__cover {
+  position: relative; border-radius: 3px 8px 8px 3px; overflow: hidden;
+  box-shadow: 18px 26px 45px -12px rgba(0,0,0,.7), inset 4px 0 8px rgba(0,0,0,.35);
+}
+.book3d__cover::after { /* لمعة على الغلاف */
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(105deg, rgba(255,255,255,.18) 0%, transparent 30%, transparent 70%, rgba(0,0,0,.25) 100%);
+}
+.book3d__pages { /* حواف الصفحات */
+  position: absolute; top: 2%; bottom: 2%; right: -14px; width: 16px;
+  transform: rotateY(90deg) translateZ(0); transform-origin: left;
+  background: repeating-linear-gradient(90deg, #f4ede4 0 2px, #d9cfc2 2px 3px);
+}
+.book3d__back {
+  position: absolute; inset: 0; transform: translateZ(-16px); border-radius: 3px 8px 8px 3px; background: #2a1a12;
+}
+
+/* ── خريطة الملصق (MapLibre) ── */
+.poster-pin { cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 6px; opacity: 0;
+  animation: pin-drop .55s cubic-bezier(.2,.8,.2,1.2) both; }
+.poster-pin__dot { position: relative; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 9999px;
+  font: 700 13px/1 var(--font-body); color: #150a10; background: linear-gradient(135deg, #f0c9a2, #c08552);
+  box-shadow: 0 0 0 3px rgb(21 10 16 / .55), 0 8px 20px rgba(0,0,0,.45); transition: transform .25s; }
+.poster-pin__dot::after { content: ""; position: absolute; inset: -6px; border-radius: 9999px; border: 1.5px solid #c08552;
+  animation: pulseRing 2.2s ease-out infinite; }
+.poster-pin__label { white-space: nowrap; padding: 3px 9px; border-radius: 9999px; font: 600 11px/1.4 var(--font-body);
+  color: #f6ece9; background: rgb(11 9 24 / .78); border: 1px solid rgb(234 220 217 / .14); backdrop-filter: blur(6px);
+  transition: all .25s; }
+.poster-pin:hover .poster-pin__dot, .poster-pin.is-active .poster-pin__dot { transform: scale(1.18); }
+.poster-pin.is-active .poster-pin__dot { background: linear-gradient(135deg, #fff, #eadcd9); }
+.poster-pin.is-active .poster-pin__label { background: #c08552; color: #150a10; border-color: transparent; }
+@media (max-width: 640px) { .poster-pin:not(.is-active) .poster-pin__label { display: none; } }
+@keyframes pin-drop { 0% { transform: translateY(-18px) scale(.6); opacity: 0 } 100% { transform: none; opacity: 1 } }
+@keyframes pulseRing { 0% { transform: scale(.7); opacity: .8 } 100% { transform: scale(1.9); opacity: 0 } }
+.maplibregl-ctrl-attrib { font-size: 10px !important; background: rgb(11 9 24 / .6) !important; color: #b9aab0 !important; }
+.maplibregl-ctrl-attrib a { color: #d7a67c !important; }
+.maplibregl-ctrl-group { background: rgb(26 19 40 / .85) !important; border: 1px solid rgb(234 220 217 / .1); }
+.maplibregl-ctrl-group button + button { border-top-color: rgb(234 220 217 / .1) !important; }
+.maplibregl-ctrl-group .maplibregl-ctrl-icon { filter: invert(.9); }
