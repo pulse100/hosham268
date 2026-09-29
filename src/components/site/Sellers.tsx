@@ -133,7 +133,7 @@ export function Sellers({ sellers }: { sellers: Seller[] }) {
                 <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-gold/10 text-gold"><Store className="h-5 w-5" /></span>
                 <div className="min-w-0 flex-1">
                   <h3 className="font-bold text-white">{s.name}</h3>
-                  <p className="mt-0.5 text-xs text-gold">{[s.governorate, s.area].filter(Boolean).join(" — ") || "كل المحافظات"}</p>
+                  <p className="mt-0.5 text-xs text-gold">{[s.governorate, s.area].filter(Boolean).join(" — ") || "يوصل لكل المحافظات"}</p>
                 </div>
                 {s.delivery && <span className="chip shrink-0 !text-emerald-300"><Truck className="h-3.5 w-3.5" /> توصيل</span>}
               </div>
