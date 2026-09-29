@@ -1,6 +1,7 @@
 import { ArrowUpLeft } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
+import { AbwabCourse } from "@/components/site/AbwabCourse";
 import { About } from "@/components/site/About";
 import { BooksGrid } from "@/components/site/Books";
 import { Contact } from "@/components/site/Contact";
@@ -69,6 +70,8 @@ export default async function HomePage() {
           <Courses courses={data.courses} />
         </div>
       </section>
+
+      <AbwabCourse texts={t} agents={data.agents} />
 
       <RepeatSystem settings={settings} />
 

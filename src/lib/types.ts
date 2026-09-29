@@ -149,6 +149,8 @@ export type SiteData = {
   faqs: Faq[];
   testimonials: Testimonial[];
   sellers: Seller[];
+  /** وكلاء الاشتراك في الدورة الإلكترونية (منصة أبواب) */
+  agents: Seller[];
   customSections: CustomSection[];
   /** كل نصوص وعناوين الموقع بعد دمج القيم الافتراضية مع تعديلات الإدارة */
   texts: Record<string, string>;

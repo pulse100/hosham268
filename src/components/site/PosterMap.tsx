@@ -98,7 +98,7 @@ export default function PosterMap({ locations, selectedId, onSelect }: {
         ...(pts.length > 1
           ? {
               bounds: pts.reduce((b, l) => b.extend([l.lng!, l.lat!]), new maplibregl.LngLatBounds()),
-              fitBoundsOptions: { padding: { top: 80, bottom: 170, left: 50, right: 50 }, maxZoom: 13 },
+              fitBoundsOptions: { padding: { top: 70, bottom: 240, left: 60, right: 60 }, maxZoom: 13 },
             }
           : {}),
         attributionControl: { compact: true },

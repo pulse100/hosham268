@@ -35,6 +35,7 @@ const out = [
   inserts("announcements", seed.announcements),
   inserts("testimonials", seed.testimonials),
   inserts("sellers", seed.sellers),
+  inserts("platform_agents", seed.agents),
   inserts("custom_sections", seed.customSections),
 ].join("\n");
 

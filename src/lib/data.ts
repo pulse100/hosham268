@@ -25,6 +25,7 @@ function fromSeed(): SiteData {
     faqs: active(seed.faqs).sort(bySort),
     testimonials: active(seed.testimonials).sort(bySort),
     sellers: active(seed.sellers).sort(bySort),
+    agents: active(seed.agents).sort(bySort),
     customSections: active(seed.customSections).sort(bySort),
     texts: resolveTexts({}, seed.settings.teacher_name),
     source: "seed",
@@ -36,7 +37,7 @@ async function fromDatabase(): Promise<SiteData> {
   const list = (table: string, order = "sort_order") =>
     db.from(table).select("*").eq("is_active", true).order(order, { ascending: order === "sort_order" });
 
-  const [settings, stats, locations, books, courses, videos, social, announcements, faqs, testimonials, sellers, customSections, texts] =
+  const [settings, stats, locations, books, courses, videos, social, announcements, faqs, testimonials, sellers, agents, customSections, texts] =
     await Promise.all([
       db.from("hm_site_settings").select("*").eq("id", 1).maybeSingle(),
       list("hm_stats"),
@@ -49,11 +50,12 @@ async function fromDatabase(): Promise<SiteData> {
       list("hm_faqs"),
       list("hm_testimonials"),
       list("hm_sellers"),
+      list("hm_platform_agents"),
       list("hm_custom_sections"),
       db.from("hm_site_texts").select("key,value"),
     ]);
 
-  const firstError = [settings, stats, locations, books, courses, videos, social, announcements, faqs, testimonials, sellers, customSections, texts].find(
+  const firstError = [settings, stats, locations, books, courses, videos, social, announcements, faqs, testimonials, sellers, agents, customSections, texts].find(
     (r) => r.error,
   )?.error;
   if (firstError) throw new Error(firstError.message);
@@ -72,6 +74,7 @@ async function fromDatabase(): Promise<SiteData> {
     faqs: faqs.data ?? [],
     testimonials: testimonials.data ?? [],
     sellers: sellers.data ?? [],
+    agents: agents.data ?? [],
     customSections: customSections.data ?? [],
     texts: resolveTexts(savedTexts, mergedSettings.teacher_name),
     source: "database",

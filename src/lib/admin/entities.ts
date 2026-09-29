@@ -80,6 +80,23 @@ export const ENTITIES: EntityConfig[] = [
     ],
   },
   {
+    key: "agents", table: "hm_platform_agents", label: "وكلاء منصة أبواب", singular: "وكيل", titleField: "name", subtitleField: "governorate", orderBy: "sort_order", ascending: true,
+    fields: [
+      { name: "name", label: "اسم الوكيل / المكتبة", type: "text", required: true, width: "half" },
+      { name: "governorate", label: "المحافظة", type: "select", width: "half", options: GOVERNORATES },
+      { name: "area", label: "المنطقة", type: "text", width: "half" },
+      { name: "address", label: "العنوان التفصيلي", type: "text", width: "half" },
+      { name: "phone", label: "رقم الهاتف", type: "tel", width: "half" },
+      { name: "phone2", label: "رقم ثانٍ", type: "tel", width: "half" },
+      { name: "whatsapp", label: "رقم WhatsApp", type: "tel", width: "half" },
+      { name: "telegram_url", label: "رابط Telegram", type: "url", width: "half" },
+      { name: "map_url", label: "رابط الموقع على Google Maps", type: "url" },
+      { name: "delivery", label: "يوفر خدمة توصيل", type: "boolean" },
+      { name: "notes", label: "ملاحظات", type: "textarea" },
+      ...common,
+    ],
+  },
+  {
     key: "sections", table: "hm_custom_sections", label: "أقسام إضافية", singular: "قسم", titleField: "title", subtitleField: "subtitle", orderBy: "sort_order", ascending: true,
     fields: [
       { name: "title", label: "عنوان القسم", type: "text", required: true, width: "half" },

@@ -20,9 +20,13 @@ const tokensOf = (q: string) =>
  * يكتب الطالب «بغداد البنوك» أو «البنوك» أو «الحلة» فتظهر المكاتب مباشرة،
  * وإذا ما موجود مكتب بالمنطقة نفسها تظهر مكاتب نفس المحافظة ثم مكاتب التوصيل.
  */
-export function Sellers({ sellers }: { sellers: Seller[] }) {
+export function Sellers({ sellers, kind = "books" }: { sellers: Seller[]; kind?: "books" | "platform" }) {
+  const one = kind === "books" ? "مكان بيع" : "وكيل";
+  const many = kind === "books" ? "أماكن بيع" : "وكلاء";
   const [q, setQ] = useState("");
   const [focus, setFocus] = useState(false);
+  const [showAll, setShowAll] = useState(false);
+  const LIMIT = 12;
 
   const index: Indexed[] = useMemo(
     () => sellers.map((s) => {
@@ -70,13 +74,16 @@ export function Sellers({ sellers }: { sellers: Seller[] }) {
       const near = index.filter((x) => x.gov.includes(govTok)).map((x) => x.s);
       return { exact: [], near, nearGov: near[0]?.governorate ?? "", mode: "gov" as const };
     }
-    return { exact: [], near: sellers.filter((s) => s.delivery || !s.governorate), nearGov: "", mode: "none" as const };
+    const fallback = sellers.filter((s) => s.delivery || !s.governorate);
+    return { exact: [], near: fallback.length ? fallback : sellers, nearGov: "", mode: "none" as const };
   }, [q, index, sellers]);
 
   if (!sellers.length)
-    return <EmptyState icon={Store} title="ستُضاف أماكن البيع قريباً" text="للاستفسار عن الملزمة تواصل معنا عبر أرقام التواصل." />;
+    return <EmptyState icon={Store} title={kind === "books" ? "ستُضاف أماكن البيع قريباً" : "سيُضاف الوكلاء قريباً"} text="للاستفسار تواصل معنا عبر أرقام التواصل." />;
 
-  const shown = result.mode === "all" || result.mode === "exact" ? result.exact : result.near;
+  const full = result.mode === "all" || result.mode === "exact" ? result.exact : result.near;
+  const collapsed = result.mode === "all" && !showAll && full.length > LIMIT;
+  const shown = collapsed ? full.slice(0, LIMIT) : full;
 
   return (
     <div>
@@ -112,10 +119,10 @@ export function Sellers({ sellers }: { sellers: Seller[] }) {
       </div>
 
       <p className="mb-6 text-center text-sm text-rose/55" aria-live="polite">
-        {result.mode === "all" && `${sellers.length} مكان بيع — اكتب منطقتك لتظهر لك الأقرب`}
-        {result.mode === "exact" && `وجدنا ${result.exact.length} ${result.exact.length === 1 ? "مكان" : "أماكن"} بيع لـ«${q.trim()}»`}
+        {result.mode === "all" && `${sellers.length} ${one} — اكتب منطقتك لتظهر لك الأقرب`}
+        {result.mode === "exact" && `وجدنا ${result.exact.length} ${result.exact.length === 1 ? one : many} لـ«${q.trim()}»`}
         {result.mode === "gov" && `ما عندنا مكتبة مسجّلة بـ«${q.trim()}» بالضبط — هذي المكاتب الموجودة بمحافظة ${result.nearGov}`}
-        {result.mode === "none" && `ما عندنا مكتبة مسجّلة بـ«${q.trim()}» بعد — هذي أماكن توصل لكل المحافظات`}
+        {result.mode === "none" && `ما عندنا مكتبة مسجّلة بـ«${q.trim()}» بعد — ${kind === "books" ? "هذي أماكن توصل لكل المحافظات" : "هذي كل الوكلاء"}`}
       </p>
 
       <motion.ul layout className="auto-grid">
@@ -160,12 +167,18 @@ export function Sellers({ sellers }: { sellers: Seller[] }) {
         </AnimatePresence>
       </motion.ul>
 
-      <div className="glass mx-auto mt-8 flex max-w-2xl flex-col items-center gap-3 p-5 text-center sm:flex-row sm:text-right">
+      {collapsed && (
+        <div className="mt-6 text-center">
+          <button type="button" onClick={() => setShowAll(true)} className="btn-ghost">عرض الكل ({full.length})</button>
+        </div>
+      )}
+
+      {kind === "books" && <div className="glass mx-auto mt-8 flex max-w-2xl flex-col items-center gap-3 p-5 text-center sm:flex-row sm:text-right">
         <p className="flex-1 text-sm leading-7 text-rose/65">ما لكيت مكتبة قريبة منك؟ الملازم متوفرة أيضاً لدى وكلاء دار المغرب في المحافظات.</p>
         <a href={AGENTS_URL} target="_blank" rel="noopener noreferrer" className="btn-ghost shrink-0">
           قائمة وكلاء دار المغرب <ExternalLink className="h-4 w-4" />
         </a>
-      </div>
+      </div>}
     </div>
   );
 }
