@@ -8,7 +8,7 @@ import { Tilt } from "../ui/Tilt";
 
 const ease = [0.2, 0.8, 0.2, 1] as const;
 
-export function Hero({ settings }: { settings: SiteSettings }) {
+export function Hero({ settings, texts: t }: { settings: SiteSettings; texts: Record<string, string> }) {
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
   const imgY = useTransform(scrollYProgress, [0, 1], [0, 80]);
@@ -16,10 +16,10 @@ export function Hero({ settings }: { settings: SiteSettings }) {
 
   const [first, ...rest] = settings.teacher_name.split(" ");
   const buttons = [
-    { href: "#about", label: "اكتشف الأستاذ", icon: UserRound, primary: true },
-    { href: "#locations", label: "أماكن التدريس", icon: MapPin },
-    { href: "#books", label: "الملازم", icon: BookOpen },
-    { href: "#social", label: "تابعني", icon: Share2 },
+    { href: "#about", label: t["hero.btn_about"], icon: UserRound, primary: true },
+    { href: "#locations", label: t["hero.btn_locations"], icon: MapPin },
+    { href: "#books", label: t["hero.btn_books"], icon: BookOpen },
+    { href: "#social", label: t["hero.btn_social"], icon: Share2 },
   ];
 
   return (
@@ -35,7 +35,7 @@ export function Hero({ settings }: { settings: SiteSettings }) {
         <div className="order-2 text-center lg:order-1 lg:text-right">
           <motion.p initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease }} className="chip mx-auto lg:mx-0">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-gold" />
-            {settings.subtitle} · السادس الإعدادي
+            {t["hero.chip"]}
           </motion.p>
 
           <h1 className="mt-6 text-5xl font-bold leading-[1.15] text-white sm:text-6xl xl:text-7xl">
@@ -104,15 +104,15 @@ export function Hero({ settings }: { settings: SiteSettings }) {
               className="glass absolute -left-3 bottom-16 px-4 py-3 text-sm sm:-left-10"
               style={{ transform: "translateZ(40px)" }}
             >
-              <p className="text-xs text-rose/60">المرحلة</p>
-              <p className="font-semibold text-white">السادس الإعدادي</p>
+              <p className="text-xs text-rose/60">{t["hero.badge1_label"]}</p>
+              <p className="font-semibold text-white">{t["hero.badge1_value"]}</p>
             </motion.div>
             <motion.div
               initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 1.05, duration: 0.6 }}
               className="glass absolute -right-3 top-24 px-4 py-3 text-sm sm:-right-8"
             >
-              <p className="text-xs text-rose/60">المادة</p>
-              <p className="font-semibold text-white">اللغة العربية</p>
+              <p className="text-xs text-rose/60">{t["hero.badge2_label"]}</p>
+              <p className="font-semibold text-white">{t["hero.badge2_value"]}</p>
             </motion.div>
           </Tilt>
         </motion.div>

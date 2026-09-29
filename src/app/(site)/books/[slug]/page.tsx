@@ -1,12 +1,12 @@
-import { CheckCircle2, Phone } from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Book3D } from "@/components/site/BookCard";
+import { Book3D } from "@/components/site/Book3D";
 import { PageHeader } from "@/components/site/PageHeader";
+import { Sellers } from "@/components/site/Sellers";
 import { Reveal } from "@/components/ui/Reveal";
 import { getSiteData } from "@/lib/data";
-import { formatPhone, siteUrl, telHref } from "@/lib/utils";
+import { siteUrl } from "@/lib/utils";
 
 export const revalidate = 300;
 
@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function BookPage({ params }: Props) {
   const { slug } = await params;
-  const { books, settings } = await getSiteData();
+  const { books, settings, sellers, texts } = await getSiteData();
   const b = books.find((x) => x.slug === slug);
   if (!b) notFound();
   const features = (b.features ?? "").split("\n").map((f) => f.trim()).filter(Boolean);
@@ -50,7 +50,7 @@ export default async function BookPage({ params }: Props) {
     <>
       <PageHeader title={b.title} description={b.subtitle} crumbs={[{ href: "/books", label: "الملازم" }]} />
       <section className="container grid items-start gap-12 pb-24 lg:grid-cols-[.8fr_1.2fr]">
-        <Reveal from="scale" className="lg:sticky lg:top-28"><div className="py-6"><Book3D book={b} priority /></div></Reveal>
+        <Reveal from="scale" className="lg:sticky lg:top-28"><div className="py-6"><Book3D book={b} priority hint /></div></Reveal>
         <div>
           <dl className="glass grid grid-cols-2 gap-px overflow-hidden p-0 sm:grid-cols-4">
             {meta.map(([k, v]) => (
@@ -65,16 +65,11 @@ export default async function BookPage({ params }: Props) {
               ))}
             </ul>
           )}
-          <div className="glass mt-10 p-6">
-            <h2 className="text-xl font-bold text-white">طلب / حجز الملزمة</h2>
-            <p className="mt-2 text-sm leading-7 text-rose/60">للطلب أو الاستفسار عن أماكن التوفر:</p>
-            <div className="mt-4 flex flex-wrap gap-3">
-              {b.order_url && <a href={b.order_url} target="_blank" rel="noopener noreferrer" className="btn-primary">اطلب الآن</a>}
-              {b.order_phone && <a href={telHref(b.order_phone)} className="btn-primary"><Phone className="h-4 w-4" /> <span dir="ltr">{formatPhone(b.order_phone)}</span></a>}
-              <Link href={`/contact?topic=${encodeURIComponent("طلب ملزمة: " + b.title)}#register`} className="btn-ghost">أرسل طلب حجز</Link>
-            </div>
-          </div>
         </div>
+      </section>
+      <section className="container pb-24">
+        <h2 className="mb-6 text-2xl font-bold text-white md:text-3xl">{texts["order.title"]}</h2>
+        <Sellers sellers={sellers} />
       </section>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
     </>

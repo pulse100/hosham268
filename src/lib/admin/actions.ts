@@ -5,6 +5,7 @@ import { CONTENT_TAG } from "../data";
 import { isSupabaseConfigured } from "../supabase/config";
 import { createSessionClient } from "../supabase/server";
 import { requireAdmin } from "./auth";
+import { TEXT_DEFAULTS } from "../texts";
 import { getEntity, SETTINGS_FIELDS, type Field } from "./entities";
 
 export type FormState = { ok: boolean; message: string; errors?: Record<string, string> } | null;
@@ -20,8 +21,11 @@ export async function login(_: FormState, form: FormData): Promise<FormState> {
   if (!email || !password) return { ok: false, message: "أدخل البريد الإلكتروني وكلمة المرور." };
   const supabase = await createSessionClient();
   const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-  if (error || !data.user) return { ok: false, message: "بيانات الدخول غير صحيحة." };
-  const { data: admin } = await supabase.from("admins").select("user_id").eq("user_id", data.user.id).maybeSingle();
+  if (error || !data.user) {
+    await new Promise((r) => setTimeout(r, 1500)); // إبطاء محاولات التخمين
+    return { ok: false, message: "بيانات الدخول غير صحيحة." };
+  }
+  const { data: admin } = await supabase.from("hm_admins").select("user_id").eq("user_id", data.user.id).maybeSingle();
   if (!admin) {
     await supabase.auth.signOut();
     return { ok: false, message: "هذا الحساب لا يملك صلاحية الإدارة." };
@@ -71,9 +75,9 @@ async function readFields(fields: Field[], form: FormData, folder: string, supab
           if (!ext) { errors[f.name] = "الصيغ المسموحة: JPG, PNG, WebP, AVIF"; break; }
           if (file.size > MAX_IMAGE) { errors[f.name] = "الحد الأقصى 5MB"; break; }
           const path = `${folder}/${crypto.randomUUID()}.${ext}`;
-          const { error } = await supabase.storage.from("media").upload(path, file, { contentType: file.type, cacheControl: "31536000" });
+          const { error } = await supabase.storage.from("hm-media").upload(path, file, { contentType: file.type, cacheControl: "31536000" });
           if (error) { errors[f.name] = "فشل رفع الصورة"; break; }
-          row[f.name] = supabase.storage.from("media").getPublicUrl(path).data.publicUrl;
+          row[f.name] = supabase.storage.from("hm-media").getPublicUrl(path).data.publicUrl;
         } else {
           row[f.name] = current || null;
         }
@@ -98,10 +102,26 @@ export async function saveSettings(_: FormState, form: FormData): Promise<FormSt
   const fields = SETTINGS_FIELDS.flatMap((g) => g.fields);
   const { row, errors } = await readFields(fields, form, "settings", supabase);
   if (Object.keys(errors).length) return { ok: false, message: "تحقق من الحقول", errors };
-  const { error } = await supabase.from("site_settings").upsert({ id: 1, ...row, updated_at: new Date().toISOString() });
+  const { error } = await supabase.from("hm_site_settings").upsert({ id: 1, ...row, updated_at: new Date().toISOString() });
   if (error) return { ok: false, message: `خطأ في الحفظ: ${error.message}` };
   refresh();
   return { ok: true, message: "تم حفظ الإعدادات" };
+}
+
+// ── نصوص وعناوين الموقع ──
+export async function saveTexts(_: FormState, form: FormData): Promise<FormState> {
+  const { supabase } = await requireAdmin();
+  const all = Object.keys(TEXT_DEFAULTS).map((key) => ({ key, value: String(form.get(key) ?? "").trim().slice(0, 2000) }));
+  const rows = all.filter((r) => r.value && r.value !== TEXT_DEFAULTS[r.key]);
+  const reset = all.filter((r) => !r.value || r.value === TEXT_DEFAULTS[r.key]).map((r) => r.key);
+  if (rows.length) {
+    const { error } = await supabase.from("hm_site_texts").upsert(rows.map((r) => ({ ...r, updated_at: new Date().toISOString() })));
+    if (error) return { ok: false, message: `خطأ في الحفظ: ${error.message}` };
+  }
+  // الحقول الفارغة أو المطابقة للافتراضي ترجع للنص الافتراضي
+  if (reset.length) await supabase.from("hm_site_texts").delete().in("key", reset);
+  refresh();
+  return { ok: true, message: "تم حفظ النصوص" };
 }
 
 // ── إضافة / تعديل عنصر ──
@@ -143,12 +163,12 @@ export async function toggleActive(entityKey: string, id: string, value: boolean
 
 export async function setInquiryStatus(id: string, status: "new" | "contacted" | "closed") {
   const { supabase } = await requireAdmin();
-  await supabase.from("inquiries").update({ status }).eq("id", id);
+  await supabase.from("hm_inquiries").update({ status }).eq("id", id);
   revalidatePath("/admin/inquiries");
 }
 
 export async function deleteInquiry(id: string) {
   const { supabase } = await requireAdmin();
-  await supabase.from("inquiries").delete().eq("id", id);
+  await supabase.from("hm_inquiries").delete().eq("id", id);
   revalidatePath("/admin/inquiries");
 }

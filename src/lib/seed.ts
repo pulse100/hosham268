@@ -7,7 +7,7 @@ import type { SiteData } from "./types";
  * أو زوّدنا بها صاحب الموقع. أي شيء غير مؤكد تُرك فارغاً أو غير مفعّل (is_active=false) ليُكمَل من لوحة الإدارة.
  * تُستخدم هذه البيانات فقط عندما لا تكون Supabase مربوطة، ونفس المحتوى موجود في supabase/seed.sql.
  */
-export const seed: Omit<SiteData, "source"> = {
+export const seed: Omit<SiteData, "source" | "texts"> = {
   settings: {
     teacher_name: "الأستاذ هشام المعموري",
     subtitle: "مدرس اللغة العربية",
@@ -134,4 +134,12 @@ export const seed: Omit<SiteData, "source"> = {
   ],
 
   testimonials: [],
+
+  // أماكن بيع الملزمة — الرقم الوحيد الموثّق حالياً هو المطبوع على الغلاف.
+  // أضف بقية الوكلاء (الاسم، المحافظة، العنوان، الأرقام) من «لوحة الإدارة ← الوكلاء».
+  sellers: [
+    { id: "sl1", name: "دار المغرب للملازم", governorate: null, area: null, address: null, phone: "07710055555", phone2: null, whatsapp: null, map_url: null, telegram_url: null, books: "موسوعة المعموري في الأدب والنصوص", delivery: false, notes: "الناشر — الرقم المطبوع على غلاف الملزمة", sort_order: 1, is_active: true },
+  ],
+
+  customSections: [],
 };

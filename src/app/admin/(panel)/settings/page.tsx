@@ -6,7 +6,7 @@ import { seed } from "@/lib/seed";
 
 export default async function SettingsPage() {
   const { supabase } = await requireAdmin();
-  const { data } = await supabase.from("site_settings").select("*").eq("id", 1).maybeSingle();
+  const { data } = await supabase.from("hm_site_settings").select("*").eq("id", 1).maybeSingle();
   return (
     <>
       <h1 className="mb-6 text-3xl font-bold text-white">الإعدادات العامة</h1>

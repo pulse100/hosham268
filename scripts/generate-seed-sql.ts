@@ -13,10 +13,10 @@ const lit = (v: unknown): string => {
 };
 
 function inserts(table: string, rows: Record<string, unknown>[]) {
-  if (!rows.length) return `-- ${table}: لا توجد بيانات أولية\n`;
+  if (!rows.length) return `-- hm_${table}: لا توجد بيانات أولية\n`;
   const cols = Object.keys(rows[0]).filter((c) => c !== "id");
   const values = rows.map((r) => `  (${cols.map((c) => lit(r[c])).join(", ")})`).join(",\n");
-  return `insert into public.${table} (${cols.join(", ")}) values\n${values};\n`;
+  return `insert into public.hm_${table} (${cols.join(", ")}) values\n${values};\n`;
 }
 
 const s = seed.settings as unknown as Record<string, unknown>;
@@ -24,7 +24,7 @@ const settingsCols = Object.keys(s);
 const out = [
   "-- ملف مولّد تلقائياً من src/lib/seed.ts — لا تعدله يدوياً (npm run db:seed-sql)",
   "-- يُشغَّل مرة واحدة بعد 0001_init.sql على قاعدة بيانات فارغة.\n",
-  `insert into public.site_settings (id, ${settingsCols.join(", ")}) values\n  (1, ${settingsCols.map((c) => lit(s[c])).join(", ")})\non conflict (id) do nothing;\n`,
+  `insert into public.hm_site_settings (id, ${settingsCols.join(", ")}) values\n  (1, ${settingsCols.map((c) => lit(s[c])).join(", ")})\non conflict (id) do nothing;\n`,
   inserts("stats", seed.stats),
   inserts("locations", seed.locations),
   inserts("books", seed.books),
@@ -34,6 +34,8 @@ const out = [
   inserts("faqs", seed.faqs),
   inserts("announcements", seed.announcements),
   inserts("testimonials", seed.testimonials),
+  inserts("sellers", seed.sellers),
+  inserts("custom_sections", seed.customSections),
 ].join("\n");
 
 writeFileSync(new URL("../supabase/seed.sql", import.meta.url), out);

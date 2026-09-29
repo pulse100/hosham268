@@ -8,7 +8,7 @@ export default async function Dashboard() {
   const counts = await Promise.all(
     ENTITIES.map(async (e) => ({ e, n: (await supabase.from(e.table).select("id", { count: "exact", head: true })).count ?? 0 })),
   );
-  const { count: newInquiries } = await supabase.from("inquiries").select("id", { count: "exact", head: true }).eq("status", "new");
+  const { count: newInquiries } = await supabase.from("hm_inquiries").select("id", { count: "exact", head: true }).eq("status", "new");
   return (
     <>
       <h1 className="text-3xl font-bold text-white">لوحة التحكم</h1>

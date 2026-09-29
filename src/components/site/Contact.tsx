@@ -32,7 +32,7 @@ export function Contact({ data, topic = "" }: { data: SiteData; topic?: string }
       </Reveal>
       <Reveal delay={0.1} className="scroll-mt-28" >
         <div id="register">
-          <h3 className="mb-4 text-xl font-bold text-white">طلب تسجيل أو استفسار</h3>
+          <h3 className="mb-4 text-xl font-bold text-white">{data.texts["contact.form_title"]}</h3>
           <InquiryForm defaultTopic={topic} courses={courses.map((c) => c.title)} />
         </div>
       </Reveal>

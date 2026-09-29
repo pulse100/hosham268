@@ -12,6 +12,7 @@ export default async function NewEntity({ params }: { params: Promise<{ entity: 
   await requireAdmin();
   const defaults: Record<string, unknown> = { is_active: true, sort_order: 0, is_approximate: true, published_at: new Date().toISOString().slice(0, 10) };
   if (entity.key === "testimonials") defaults.is_active = false;
+  if (entity.key === "sections") defaults.layout = "image-left";
   return (
     <>
       <Link href={`/admin/${entity.key}`} className="text-sm text-rose/50 hover:text-gold">← {entity.label}</Link>

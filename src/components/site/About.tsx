@@ -4,11 +4,11 @@ import type { SiteSettings } from "@/lib/types";
 import { Reveal } from "../ui/Reveal";
 import { Tilt } from "../ui/Tilt";
 
-export function About({ settings }: { settings: SiteSettings }) {
+export function About({ settings, texts: t }: { settings: SiteSettings; texts: Record<string, string> }) {
   const pillars = [
-    { icon: Users, title: "دروس حضورية", text: "في عدد من معاهد بغداد" },
-    { icon: MonitorSmartphone, title: "منصة إلكترونية", text: settings.platform_name ?? "منصة المعموري" },
-    { icon: GraduationCap, title: "طلبة الإعدادية", text: "السادس الإعدادي علمي وأدبي" },
+    { icon: Users, title: t["about.p1_title"], text: t["about.p1_text"] },
+    { icon: MonitorSmartphone, title: t["about.p2_title"], text: t["about.p2_text"] },
+    { icon: GraduationCap, title: t["about.p3_title"], text: t["about.p3_text"] },
   ];
   return (
     <section id="about" className="section">
@@ -21,14 +21,14 @@ export function About({ settings }: { settings: SiteSettings }) {
                 <Image src={settings.about_image} alt={`صورة ${settings.teacher_name}`} fill sizes="(max-width: 1024px) 90vw, 450px" className="object-cover" />
               )}
               <div className="absolute inset-0 bg-gradient-to-t from-ink/70 via-transparent to-transparent" />
-              <p className="absolute bottom-5 right-6 font-[family-name:var(--font-ruqaa)] text-3xl text-white drop-shadow">لغة الضاد</p>
+              <p className="absolute bottom-5 right-6 font-[family-name:var(--font-ruqaa)] text-3xl text-white drop-shadow">{t["about.caption"]}</p>
             </div>
           </Tilt>
         </Reveal>
 
         <div>
           <Reveal>
-            <p className="eyebrow">تعرّف على الأستاذ</p>
+            <p className="eyebrow">{t["about.eyebrow"]}</p>
             <h2 className="mt-3 text-3xl font-bold leading-tight text-white md:text-5xl">
               من هو <span className="text-gradient">{settings.teacher_name.replace(/^الأستاذ\s*/, "")}</span>؟
             </h2>

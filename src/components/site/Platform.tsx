@@ -4,7 +4,7 @@ import type { SiteSettings } from "@/lib/types";
 import { AppleIcon, PlayStoreIcon } from "../ui/BrandIcons";
 import { Reveal } from "../ui/Reveal";
 
-export function Platform({ settings }: { settings: SiteSettings }) {
+export function Platform({ settings, texts: t }: { settings: SiteSettings; texts: Record<string, string> }) {
   const stores = [
     { href: settings.app_store_url, icon: AppleIcon, top: "حمّله من", name: "App Store" },
     { href: settings.google_play_url, icon: PlayStoreIcon, top: "احصل عليه من", name: "Google Play" },
@@ -19,7 +19,7 @@ export function Platform({ settings }: { settings: SiteSettings }) {
           <div aria-hidden className="absolute -left-20 -top-20 h-72 w-72 rounded-full bg-gold/20 blur-3xl" />
           <div className="relative grid items-center gap-10 lg:grid-cols-[1.2fr_.8fr]">
             <Reveal>
-              <p className="eyebrow">المنصة الإلكترونية</p>
+              <p className="eyebrow">{t["platform.eyebrow"]}</p>
               <h2 className="mt-3 text-4xl font-bold text-white md:text-6xl">{settings.platform_name}</h2>
               {settings.platform_description && <p className="mt-4 max-w-lg text-lg leading-8 text-rose/80">{settings.platform_description}</p>}
               <div className="mt-8 flex flex-wrap gap-3">

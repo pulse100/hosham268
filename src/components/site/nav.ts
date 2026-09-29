@@ -2,6 +2,7 @@ export const NAV = [
   { href: "/", label: "الرئيسية" },
   { href: "/about", label: "من هو الأستاذ" },
   { href: "/books", label: "الملازم" },
+  { href: "/order", label: "لطلب الملزمة" },
   { href: "/locations", label: "أماكن التدريس" },
   { href: "/courses", label: "الدورات" },
   { href: "/platform", label: "المنصة" },

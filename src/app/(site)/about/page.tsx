@@ -16,7 +16,7 @@ export default async function AboutPage() {
   return (
     <>
       <PageHeader title={`من هو ${data.settings.teacher_name}؟`} description={data.settings.subtitle} />
-      <div className="-mt-16"><About settings={data.settings} /></div>
+      <div className="-mt-16"><About settings={data.settings} texts={data.texts} /></div>
       <Stats stats={data.stats} />
       <section className="section">
         <div className="container">

@@ -33,9 +33,15 @@ const common: Field[] = [
   { name: "is_active", label: "منشور على الموقع", type: "boolean", width: "half" },
 ];
 
+const GOVERNORATES = [
+  "بغداد", "البصرة", "نينوى", "أربيل", "النجف", "كربلاء", "بابل", "ذي قار", "الأنبار", "ديالى",
+  "كركوك", "صلاح الدين", "واسط", "ميسان", "القادسية", "المثنى", "دهوك", "السليمانية", "حلبجة",
+  "كل المحافظات",
+].map((g) => ({ value: g, label: g }));
+
 export const ENTITIES: EntityConfig[] = [
   {
-    key: "books", table: "books", label: "الملازم", singular: "ملزمة", titleField: "title", subtitleField: "grade", orderBy: "sort_order", ascending: true,
+    key: "books", table: "hm_books", label: "الملازم", singular: "ملزمة", titleField: "title", subtitleField: "grade", orderBy: "sort_order", ascending: true,
     fields: [
       { name: "title", label: "اسم الملزمة", type: "text", required: true, width: "half" },
       { name: "subtitle", label: "العنوان الفرعي", type: "text", width: "half" },
@@ -54,7 +60,39 @@ export const ENTITIES: EntityConfig[] = [
     ],
   },
   {
-    key: "locations", table: "locations", label: "أماكن التدريس", singular: "معهد", titleField: "name", subtitleField: "area", orderBy: "sort_order", ascending: true,
+    key: "sellers", table: "hm_sellers", label: "الوكلاء وأماكن البيع", singular: "وكيل", titleField: "name", subtitleField: "governorate", orderBy: "sort_order", ascending: true,
+    fields: [
+      { name: "name", label: "اسم الوكيل / المكتبة", type: "text", required: true, width: "half" },
+      { name: "governorate", label: "المحافظة", type: "select", width: "half", options: GOVERNORATES },
+      { name: "area", label: "المنطقة", type: "text", width: "half" },
+      { name: "address", label: "العنوان التفصيلي", type: "text", width: "half" },
+      { name: "phone", label: "رقم الهاتف", type: "tel", width: "half" },
+      { name: "phone2", label: "رقم ثانٍ", type: "tel", width: "half" },
+      { name: "whatsapp", label: "رقم WhatsApp", type: "tel", width: "half" },
+      { name: "telegram_url", label: "رابط Telegram", type: "url", width: "half" },
+      { name: "map_url", label: "رابط الموقع على Google Maps", type: "url" },
+      { name: "books", label: "الملازم المتوفرة لديه", type: "text" },
+      { name: "delivery", label: "يوفر خدمة توصيل", type: "boolean" },
+      { name: "notes", label: "ملاحظات", type: "textarea" },
+      ...common,
+    ],
+  },
+  {
+    key: "sections", table: "hm_custom_sections", label: "أقسام إضافية", singular: "قسم", titleField: "title", subtitleField: "subtitle", orderBy: "sort_order", ascending: true,
+    fields: [
+      { name: "title", label: "عنوان القسم", type: "text", required: true, width: "half" },
+      { name: "subtitle", label: "عنوان صغير فوقه", type: "text", width: "half" },
+      { name: "body", label: "النص", type: "textarea" },
+      { name: "image", label: "صورة", type: "image" },
+      { name: "layout", label: "التصميم", type: "select", required: true, width: "half", options: [
+        { value: "image-left", label: "الصورة يسار والنص يمين" }, { value: "image-right", label: "الصورة يمين والنص يسار" }, { value: "text", label: "نص فقط (في المنتصف)" }] },
+      { name: "button_label", label: "نص الزر (اختياري)", type: "text", width: "half" },
+      { name: "button_url", label: "رابط الزر", type: "url" },
+      ...common,
+    ],
+  },
+  {
+    key: "locations", table: "hm_locations", label: "أماكن التدريس", singular: "معهد", titleField: "name", subtitleField: "area", orderBy: "sort_order", ascending: true,
     fields: [
       { name: "name", label: "اسم المعهد", type: "text", required: true, width: "half" },
       { name: "area", label: "المنطقة", type: "text", required: true, width: "half" },
@@ -70,7 +108,7 @@ export const ENTITIES: EntityConfig[] = [
     ],
   },
   {
-    key: "courses", table: "courses", label: "الدورات", singular: "دورة", titleField: "title", subtitleField: "grade", orderBy: "sort_order", ascending: true,
+    key: "courses", table: "hm_courses", label: "الدورات", singular: "دورة", titleField: "title", subtitleField: "grade", orderBy: "sort_order", ascending: true,
     fields: [
       { name: "title", label: "اسم الدورة", type: "text", required: true, width: "half" },
       { name: "grade", label: "الصف", type: "text", width: "half" },
@@ -85,7 +123,7 @@ export const ENTITIES: EntityConfig[] = [
     ],
   },
   {
-    key: "videos", table: "videos", label: "الفيديوهات", singular: "فيديو", titleField: "title", subtitleField: "youtube_url", orderBy: "sort_order", ascending: true,
+    key: "videos", table: "hm_videos", label: "الفيديوهات", singular: "فيديو", titleField: "title", subtitleField: "youtube_url", orderBy: "sort_order", ascending: true,
     fields: [
       { name: "title", label: "عنوان الفيديو", type: "text", required: true },
       { name: "youtube_url", label: "رابط YouTube (فيديو أو قائمة تشغيل)", type: "url", required: true },
@@ -95,7 +133,7 @@ export const ENTITIES: EntityConfig[] = [
     ],
   },
   {
-    key: "social", table: "social_links", label: "الحسابات", singular: "حساب", titleField: "label", subtitleField: "url", orderBy: "sort_order", ascending: true,
+    key: "social", table: "hm_social_links", label: "الحسابات", singular: "حساب", titleField: "label", subtitleField: "url", orderBy: "sort_order", ascending: true,
     fields: [
       { name: "platform", label: "المنصة", type: "select", required: true, width: "half", options: [
         { value: "instagram", label: "Instagram" }, { value: "telegram", label: "Telegram" }, { value: "youtube", label: "YouTube" },
@@ -108,7 +146,7 @@ export const ENTITIES: EntityConfig[] = [
     ],
   },
   {
-    key: "stats", table: "stats", label: "الأرقام", singular: "رقم", titleField: "label", orderBy: "sort_order", ascending: true,
+    key: "stats", table: "hm_stats", label: "الأرقام", singular: "رقم", titleField: "label", orderBy: "sort_order", ascending: true,
     fields: [
       { name: "label", label: "الوصف", type: "text", required: true, placeholder: "متابع على Telegram" },
       { name: "value", label: "الرقم", type: "float", width: "half", help: "مثال: 240 مع لاحقة K" },
@@ -120,7 +158,7 @@ export const ENTITIES: EntityConfig[] = [
     ],
   },
   {
-    key: "announcements", table: "announcements", label: "الإعلانات", singular: "إعلان", titleField: "title", subtitleField: "published_at", orderBy: "published_at", ascending: false,
+    key: "announcements", table: "hm_announcements", label: "الإعلانات", singular: "إعلان", titleField: "title", subtitleField: "published_at", orderBy: "published_at", ascending: false,
     fields: [
       { name: "title", label: "العنوان", type: "text", required: true },
       { name: "body", label: "النص", type: "textarea" },
@@ -131,7 +169,7 @@ export const ENTITIES: EntityConfig[] = [
     ],
   },
   {
-    key: "faqs", table: "faqs", label: "الأسئلة الشائعة", singular: "سؤال", titleField: "question", orderBy: "sort_order", ascending: true,
+    key: "faqs", table: "hm_faqs", label: "الأسئلة الشائعة", singular: "سؤال", titleField: "question", orderBy: "sort_order", ascending: true,
     fields: [
       { name: "question", label: "السؤال", type: "text", required: true },
       { name: "answer", label: "الجواب", type: "textarea", required: true },
@@ -139,7 +177,7 @@ export const ENTITIES: EntityConfig[] = [
     ],
   },
   {
-    key: "testimonials", table: "testimonials", label: "آراء الطلاب", singular: "رأي", titleField: "name", subtitleField: "grade", orderBy: "sort_order", ascending: true,
+    key: "testimonials", table: "hm_testimonials", label: "آراء الطلاب", singular: "رأي", titleField: "name", subtitleField: "grade", orderBy: "sort_order", ascending: true,
     fields: [
       { name: "name", label: "اسم الطالب", type: "text", required: true, width: "half" },
       { name: "grade", label: "المرحلة", type: "text", width: "half" },

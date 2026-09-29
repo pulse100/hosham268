@@ -54,7 +54,7 @@ export function Footer({ data }: { data: SiteData }) {
       </div>
       <div className="border-t border-line/5">
         <div className="container flex flex-col items-center justify-between gap-2 py-6 text-xs text-rose/40 sm:flex-row">
-          <p>© {new Date().getFullYear()} {settings.teacher_name}. جميع الحقوق محفوظة.</p>
+          <p>© {new Date().getFullYear()} {settings.teacher_name}. {data.texts["footer.rights"]}</p>
           <p>{settings.subtitle}</p>
         </div>
       </div>

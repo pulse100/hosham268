@@ -8,7 +8,7 @@ const label = { new: "جديد", contacted: "تم التواصل", closed: "مغ
 
 export default async function InquiriesPage() {
   const { supabase } = await requireAdmin();
-  const { data } = await supabase.from("inquiries").select("*").order("created_at", { ascending: false }).limit(200);
+  const { data } = await supabase.from("hm_inquiries").select("*").order("created_at", { ascending: false }).limit(200);
   const rows = (data ?? []) as Inquiry[];
   return (
     <>

@@ -4,6 +4,7 @@ import { unstable_cache } from "next/cache";
 import { seed } from "./seed";
 import { isSupabaseConfigured } from "./supabase/config";
 import { createPublicClient } from "./supabase/server";
+import { resolveTexts } from "./texts";
 import type { SiteData } from "./types";
 
 export const CONTENT_TAG = "site-content";
@@ -23,6 +24,9 @@ function fromSeed(): SiteData {
     announcements: active(seed.announcements),
     faqs: active(seed.faqs).sort(bySort),
     testimonials: active(seed.testimonials).sort(bySort),
+    sellers: active(seed.sellers).sort(bySort),
+    customSections: active(seed.customSections).sort(bySort),
+    texts: resolveTexts({}, seed.settings.teacher_name),
     source: "seed",
   };
 }
@@ -32,27 +36,32 @@ async function fromDatabase(): Promise<SiteData> {
   const list = (table: string, order = "sort_order") =>
     db.from(table).select("*").eq("is_active", true).order(order, { ascending: order === "sort_order" });
 
-  const [settings, stats, locations, books, courses, videos, social, announcements, faqs, testimonials] =
+  const [settings, stats, locations, books, courses, videos, social, announcements, faqs, testimonials, sellers, customSections, texts] =
     await Promise.all([
-      db.from("site_settings").select("*").eq("id", 1).maybeSingle(),
-      list("stats"),
-      list("locations"),
-      list("books"),
-      list("courses"),
-      list("videos"),
-      list("social_links"),
-      list("announcements", "published_at"),
-      list("faqs"),
-      list("testimonials"),
+      db.from("hm_site_settings").select("*").eq("id", 1).maybeSingle(),
+      list("hm_stats"),
+      list("hm_locations"),
+      list("hm_books"),
+      list("hm_courses"),
+      list("hm_videos"),
+      list("hm_social_links"),
+      list("hm_announcements", "published_at"),
+      list("hm_faqs"),
+      list("hm_testimonials"),
+      list("hm_sellers"),
+      list("hm_custom_sections"),
+      db.from("hm_site_texts").select("key,value"),
     ]);
 
-  const firstError = [settings, stats, locations, books, courses, videos, social, announcements, faqs, testimonials].find(
+  const firstError = [settings, stats, locations, books, courses, videos, social, announcements, faqs, testimonials, sellers, customSections, texts].find(
     (r) => r.error,
   )?.error;
   if (firstError) throw new Error(firstError.message);
 
+  const mergedSettings = { ...seed.settings, ...(settings.data ?? {}) };
+  const savedTexts = Object.fromEntries((texts.data ?? []).map((r: { key: string; value: string }) => [r.key, r.value]));
   return {
-    settings: { ...seed.settings, ...(settings.data ?? {}) },
+    settings: mergedSettings,
     stats: stats.data ?? [],
     locations: locations.data ?? [],
     books: books.data ?? [],
@@ -62,6 +71,9 @@ async function fromDatabase(): Promise<SiteData> {
     announcements: announcements.data ?? [],
     faqs: faqs.data ?? [],
     testimonials: testimonials.data ?? [],
+    sellers: sellers.data ?? [],
+    customSections: customSections.data ?? [],
+    texts: resolveTexts(savedTexts, mergedSettings.teacher_name),
     source: "database",
   } as SiteData;
 }

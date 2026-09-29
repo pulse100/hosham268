@@ -24,7 +24,7 @@ export async function submitInquiry(_: InquiryState, form: FormData): Promise<In
   if (!isSupabaseConfigured) return { ok: false, message: "استقبال الطلبات غير مفعّل حالياً — يرجى الاتصال مباشرة على الأرقام." };
 
   const { website: _hp, ...row } = parsed.data;
-  const { error } = await createPublicClient().from("inquiries").insert(row);
+  const { error } = await createPublicClient().from("hm_inquiries").insert(row);
   if (error) return { ok: false, message: "تعذّر إرسال الطلب، حاول مرة أخرى أو اتصل بنا مباشرة." };
   return { ok: true, message: "تم استلام طلبك بنجاح، سنتواصل معك قريباً." };
 }

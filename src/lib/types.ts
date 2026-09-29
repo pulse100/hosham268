@@ -111,6 +111,31 @@ export type Testimonial = Row & {
   body: string;
 };
 
+export type Seller = Row & {
+  name: string;
+  governorate: string | null;
+  area: string | null;
+  address: string | null;
+  phone: string | null;
+  phone2: string | null;
+  whatsapp: string | null;
+  map_url: string | null;
+  telegram_url: string | null;
+  books: string | null;
+  delivery: boolean;
+  notes: string | null;
+};
+
+export type CustomSection = Row & {
+  title: string;
+  subtitle: string | null;
+  body: string | null;
+  image: string | null;
+  button_label: string | null;
+  button_url: string | null;
+  layout: "image-left" | "image-right" | "text";
+};
+
 export type SiteData = {
   settings: SiteSettings;
   stats: Stat[];
@@ -122,6 +147,10 @@ export type SiteData = {
   announcements: Announcement[];
   faqs: Faq[];
   testimonials: Testimonial[];
+  sellers: Seller[];
+  customSections: CustomSection[];
+  /** كل نصوص وعناوين الموقع بعد دمج القيم الافتراضية مع تعديلات الإدارة */
+  texts: Record<string, string>;
   source: "database" | "seed";
 };
 

@@ -1,5 +1,5 @@
 "use client";
-import { BarChart3, BookOpen, ClipboardList, GraduationCap, HelpCircle, Inbox, LayoutDashboard, LogOut, MapPin, Megaphone, MessageSquareQuote, Settings, Share2, Video, X, Menu, ExternalLink } from "lucide-react";
+import { BarChart3, BookOpen, LayoutTemplate, Store, Type, ClipboardList, GraduationCap, HelpCircle, Inbox, LayoutDashboard, LogOut, MapPin, Megaphone, MessageSquareQuote, Settings, Share2, Video, X, Menu, ExternalLink } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -10,7 +10,10 @@ const LINKS = [
   { href: "/admin", label: "لوحة التحكم", icon: LayoutDashboard },
   { href: "/admin/inquiries", label: "طلبات التسجيل", icon: Inbox },
   { href: "/admin/settings", label: "الإعدادات العامة", icon: Settings },
+  { href: "/admin/texts", label: "نصوص وعناوين الموقع", icon: Type },
   { href: "/admin/books", label: "الملازم", icon: BookOpen },
+  { href: "/admin/sellers", label: "الوكلاء وأماكن البيع", icon: Store },
+  { href: "/admin/sections", label: "أقسام إضافية", icon: LayoutTemplate },
   { href: "/admin/locations", label: "أماكن التدريس", icon: MapPin },
   { href: "/admin/courses", label: "الدورات", icon: GraduationCap },
   { href: "/admin/videos", label: "الفيديوهات", icon: Video },
