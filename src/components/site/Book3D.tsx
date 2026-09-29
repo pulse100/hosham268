@@ -1,133 +1,104 @@
 "use client";
-import { animate, motion, useMotionValue, useSpring, useTransform } from "framer-motion";
-import { BookOpen, Hand } from "lucide-react";
+import { motion, useMotionValue, useReducedMotion, useSpring, useTransform } from "framer-motion";
 import Image from "next/image";
 import { useRef, useState } from "react";
 import type { Book } from "@/lib/types";
 import { cn } from "@/lib/utils";
-
-const REST_Y = -24;
-const REST_X = 6;
+import { GeneratedCover } from "./GeneratedCover";
 
 /**
- * ملزمة ثلاثية الأبعاد تفاعلية:
- * - تميل مع حركة الماوس.
- * - تُسحب بالإصبع أو الماوس لتدويرها في كل الاتجاهات.
- * - الضغط عليها يديرها لتظهر الكعب والغلاف الخلفي ثم ترجع.
+ * ملزمة بشكلها الطبيعي «تطفو» بلا جاذبية:
+ * - حركة طفو هادئة ومستمرة.
+ * - عند مرور الماوس أو اللمس ينضغط الجزء الذي تلمسه للخلف (كأنك تدفع جسماً طافياً)،
+ *   وعند الضغط يكون الدفع أقوى، ثم ترجع بنعومة لمكانها.
  */
-export function Book3D({ book, priority = false, hint = false, className }: {
-  book: Book; priority?: boolean; hint?: boolean; className?: string;
-}) {
-  const ry = useMotionValue(REST_Y);
-  const rx = useMotionValue(REST_X);
-  const sry = useSpring(ry, { stiffness: 120, damping: 14 });
-  const srx = useSpring(rx, { stiffness: 120, damping: 14 });
-  const shadowX = useTransform(sry, [-60, 60], [40, -40]);
-  const glare = useTransform(sry, [-60, 0, 60], [0.05, 0.22, 0.05]);
-  const drag = useRef<{ x: number; y: number; ry: number; rx: number; moved: boolean } | null>(null);
-  const [spun, setSpun] = useState(false);
-  const [touched, setTouched] = useState(false);
+export function Book3D({ book, priority = false, className }: { book: Book; priority?: boolean; hint?: boolean; className?: string }) {
+  const reduce = useReducedMotion();
+  const px = useMotionValue(0); // موقع اللمس أفقياً من -0.5 إلى 0.5
+  const py = useMotionValue(0);
+  const push = useMotionValue(0); // شدة الدفع 0 — 1
+  const cfg = { stiffness: 140, damping: 16, mass: 0.8 };
+  const spx = useSpring(px, cfg);
+  const spy = useSpring(py, cfg);
+  const spush = useSpring(push, cfg);
+  // الجزء الملموس يرجع للخلف: لمس اليمين يدفع اليمين للداخل
+  const rotateY = useTransform([spx, spush], ([x, p]: number[]) => -8 + x * (10 + 22 * p));
+  const rotateX = useTransform([spy, spush], ([y, p]: number[]) => 3 - y * (8 + 16 * p));
+  const z = useTransform(spush, [0, 1], [0, -40]);
+  const glareX = useTransform(spx, [-0.5, 0.5], ["20%", "80%"]);
+  const glareY = useTransform(spy, [-0.5, 0.5], ["20%", "80%"]);
+  const glare = useTransform([glareX, glareY], ([x, y]: string[]) => `radial-gradient(circle at ${x} ${y}, rgba(255,255,255,.45), transparent 55%)`);
+  const ref = useRef<HTMLDivElement>(null);
+  const [ripple, setRipple] = useState<{ x: number; y: number; k: number } | null>(null);
 
-  const reset = () => { ry.set(spun ? 155 : REST_Y); rx.set(REST_X); };
+  const track = (e: React.PointerEvent) => {
+    const r = ref.current!.getBoundingClientRect();
+    px.set((e.clientX - r.left) / r.width - 0.5);
+    py.set((e.clientY - r.top) / r.height - 0.5);
+  };
+  const release = () => { px.set(0); py.set(0); push.set(0); };
 
   return (
-    <div className={cn("relative mx-auto w-[70%] max-w-[260px] select-none", className)} style={{ perspective: 1200 }}>
+    <div className={cn("relative mx-auto w-[70%] max-w-[260px] select-none", className)} style={{ perspective: 1100 }}>
+      {/* طفو مستمر */}
       <motion.div
-        role="button"
-        tabIndex={0}
-        aria-label={`تدوير ملزمة ${book.title}`}
-        className="relative cursor-grab touch-none active:cursor-grabbing"
-        style={{ rotateY: sry, rotateX: srx, transformStyle: "preserve-3d" }}
-        onPointerDown={(e) => {
-          e.currentTarget.setPointerCapture(e.pointerId);
-          drag.current = { x: e.clientX, y: e.clientY, ry: ry.get(), rx: rx.get(), moved: false };
-          setTouched(true);
-        }}
-        onPointerMove={(e) => {
-          const d = drag.current;
-          if (d) {
-            const dx = e.clientX - d.x;
-            const dy = e.clientY - d.y;
-            if (Math.abs(dx) + Math.abs(dy) > 4) d.moved = true;
-            ry.set(d.ry + dx * 0.6);
-            rx.set(Math.max(-35, Math.min(35, d.rx - dy * 0.4)));
-          } else if (e.pointerType === "mouse" && !spun) {
-            const r = e.currentTarget.getBoundingClientRect();
-            ry.set(REST_Y + ((e.clientX - r.left) / r.width - 0.5) * 30);
-            rx.set(REST_X - ((e.clientY - r.top) / r.height - 0.5) * 16);
-          }
-        }}
-        onPointerUp={() => {
-          const d = drag.current;
-          drag.current = null;
-          if (d && !d.moved) {
-            // ضغطة: تدوير لإظهار الكعب والغلاف الخلفي، والضغطة الثانية ترجعها
-            const next = !spun;
-            setSpun(next);
-            animate(ry, next ? 155 : REST_Y, { type: "spring", stiffness: 70, damping: 12 });
-            rx.set(REST_X);
-          } else {
-            reset();
-          }
-        }}
-        onPointerLeave={() => { if (!drag.current) reset(); }}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            const next = !spun;
-            setSpun(next);
-            ry.set(next ? 155 : REST_Y);
-          }
-        }}
+        animate={reduce ? undefined : { y: [0, -12, 0], rotateZ: [-0.8, 0.8, -0.8] }}
+        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+        style={{ transformStyle: "preserve-3d" }}
       >
-        {/* الغلاف الأمامي */}
-        <div className="relative aspect-[1563/2313] overflow-hidden rounded-[3px_8px_8px_3px] bg-wine shadow-[inset_4px_0_8px_rgba(0,0,0,.35)]" style={{ backfaceVisibility: "hidden", transform: "translateZ(12px)" }}>
-          {book.cover_image ? (
-            <Image src={book.cover_image} alt={`غلاف ملزمة ${book.title}`} fill sizes="260px" priority={priority} draggable={false} className="pointer-events-none object-cover" />
-          ) : (
-            <div className="grid h-full place-items-center text-gold"><BookOpen className="h-10 w-10" /></div>
-          )}
-          <motion.div aria-hidden className="pointer-events-none absolute inset-0" style={{ opacity: glare, background: "linear-gradient(105deg, #fff 0%, transparent 35%, transparent 70%, rgba(0,0,0,.6) 100%)" }} />
-        </div>
-
-        {/* الكعب (يمين الملزمة العربية) */}
-        <div
-          aria-hidden
-          className="absolute inset-y-0 right-0 flex w-6 items-center justify-center overflow-hidden rounded-sm bg-gradient-to-l from-[#3a1a12] via-[#5a2a1c] to-[#3a1a12]"
-          style={{ transform: "translateX(12px) rotateY(90deg)" }}
+        <motion.div
+          ref={ref}
+          className="relative touch-none"
+          style={{ rotateY, rotateX, z, transformStyle: "preserve-3d" }}
+          onPointerMove={(e) => { track(e); if (push.get() === 0) push.set(e.pointerType === "mouse" ? 0.25 : 0); }}
+          onPointerDown={(e) => {
+            track(e);
+            push.set(1);
+            const r = ref.current!.getBoundingClientRect();
+            setRipple({ x: e.clientX - r.left, y: e.clientY - r.top, k: Date.now() });
+          }}
+          onPointerUp={() => push.set(0.25)}
+          onPointerLeave={release}
+          onPointerCancel={release}
         >
-          <span className="whitespace-nowrap text-[10px] font-bold text-gold/80 [writing-mode:vertical-rl]">{book.title}</span>
-        </div>
-
-        {/* حافة الصفحات (يسار) */}
-        <div
-          aria-hidden
-          className="absolute inset-y-[1.5%] left-0 w-6"
-          style={{ transform: "translateX(-12px) rotateY(-90deg)", background: "repeating-linear-gradient(90deg,#f4ede4 0 2px,#d9cfc2 2px 3px)" }}
-        />
-
-        {/* الغلاف الخلفي */}
-        <div
-          aria-hidden
-          className="absolute inset-0 grid place-items-center rounded-[8px_3px_3px_8px] bg-gradient-to-br from-[#3a1a12] to-[#1c0b13] p-4 text-center"
-          style={{ transform: "rotateY(180deg) translateZ(12px)", backfaceVisibility: "hidden" }}
-        >
-          <div>
-            <p className="font-[family-name:var(--font-ruqaa)] text-2xl text-gold">{book.title}</p>
-            {book.subtitle && <p className="mt-1 text-xs text-rose/70">{book.subtitle}</p>}
-            {book.publisher && <p className="mt-4 text-[10px] text-rose/40">{book.publisher}</p>}
+          {/* الغلاف */}
+          <div className="relative aspect-[1563/2313] overflow-hidden rounded-[3px_8px_8px_3px] bg-wine shadow-[inset_-4px_0_8px_rgba(0,0,0,.35)]" style={{ transform: "translateZ(6px)" }}>
+            {book.cover_image ? (
+              <Image src={book.cover_image} alt={`غلاف ملزمة ${book.title}`} fill sizes="260px" priority={priority} draggable={false} className="pointer-events-none object-cover" />
+            ) : (
+              <GeneratedCover book={book} />
+            )}
+            {/* لمعة تتبع مكان اللمس */}
+            <motion.div
+              aria-hidden
+              className="pointer-events-none absolute inset-0 mix-blend-soft-light"
+              style={{ background: glare }}
+            />
+            {ripple && (
+              <motion.span
+                key={ripple.k}
+                aria-hidden
+                initial={{ scale: 0, opacity: 0.5 }}
+                animate={{ scale: 6, opacity: 0 }}
+                transition={{ duration: 0.7, ease: "easeOut" }}
+                className="pointer-events-none absolute h-10 w-10 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/60"
+                style={{ left: ripple.x, top: ripple.y }}
+              />
+            )}
           </div>
-        </div>
+          {/* سُمك الملزمة: حافة الصفحات */}
+          <div aria-hidden className="absolute inset-y-[1%] left-0 w-3" style={{ transform: "translateX(-6px) rotateY(-90deg)", background: "repeating-linear-gradient(90deg,#f4ede4 0 2px,#d9cfc2 2px 3px)" }} />
+          <div aria-hidden className="absolute inset-0 rounded-[3px_8px_8px_3px] bg-[#2a1a12]" style={{ transform: "translateZ(-6px)" }} />
+        </motion.div>
       </motion.div>
 
-      {/* الظل */}
-      <motion.div aria-hidden style={{ x: shadowX }} className="mx-auto mt-6 h-4 w-3/4 rounded-[50%] bg-black/50 blur-md" />
-
-      {hint && !touched && (
-        <p className="pointer-events-none mt-3 flex items-center justify-center gap-1.5 text-xs text-rose/50">
-          <Hand className="h-3.5 w-3.5 animate-bounce" /> اضغط أو اسحب لتدوير الملزمة
-        </p>
-      )}
+      {/* ظل يبتعد ويقترب مع الطفو */}
+      <motion.div
+        aria-hidden
+        animate={reduce ? undefined : { scaleX: [1, 0.85, 1], opacity: [0.55, 0.3, 0.55] }}
+        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+        className="mx-auto mt-8 h-4 w-3/4 rounded-[50%] bg-black blur-md"
+      />
     </div>
   );
 }

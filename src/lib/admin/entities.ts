@@ -1,3 +1,4 @@
+import { BOOK_CATEGORIES } from "../books";
 /**
  * تعريف كل أقسام المحتوى في لوحة الإدارة.
  * لإضافة حقل جديد: أضفه في قاعدة البيانات ثم هنا — تُبنى النماذج والجداول تلقائياً.
@@ -45,11 +46,12 @@ export const ENTITIES: EntityConfig[] = [
     fields: [
       { name: "title", label: "اسم الملزمة", type: "text", required: true, width: "half" },
       { name: "subtitle", label: "العنوان الفرعي", type: "text", width: "half" },
+      { name: "category", label: "نوع الملزمة", type: "select", width: "half", options: BOOK_CATEGORIES.map((c) => ({ value: c.value, label: c.label })) },
       { name: "slug", label: "الرابط المختصر (بالإنجليزية)", type: "text", required: true, dir: "ltr", help: "مثال: mawsooa-adab-2026 — يظهر في رابط الصفحة", width: "half" },
       { name: "grade", label: "الصف", type: "text", width: "half" },
       { name: "subject", label: "المادة", type: "text", width: "half" },
       { name: "academic_year", label: "السنة الدراسية", type: "text", width: "half" },
-      { name: "cover_image", label: "صورة الغلاف", type: "image", help: "استخدم الصورة الحقيقية للغلاف (JPG/PNG/WebP حتى 5MB)" },
+      { name: "cover_image", label: "صورة الغلاف", type: "image", help: "ارفع صورة الغلاف الحقيقية (JPG/PNG/WebP حتى 5MB). إذا تركتها فارغة يظهر غلاف مصمم تلقائياً" },
       { name: "description", label: "وصف مختصر", type: "textarea" },
       { name: "features", label: "المميزات", type: "textarea", help: "سطر لكل ميزة" },
       { name: "publisher", label: "الناشر", type: "text", width: "half" },

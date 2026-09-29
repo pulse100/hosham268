@@ -76,6 +76,7 @@ create table if not exists public.hm_locations (
 create table if not exists public.hm_books (
   id uuid primary key default gen_random_uuid(),
   slug text unique not null,
+  category text,                     -- adab | qawaid | wajibat | muraja | wizariyat | other
   title text not null,
   subtitle text,
   grade text,

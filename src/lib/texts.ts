@@ -45,7 +45,7 @@ export const TEXT_GROUPS: { group: string; items: Record<string, TextDef> }[] = 
     "locations.desc": { label: "أماكن التدريس — الوصف", default: "اختر المعهد الأقرب إليك لعرض تفاصيله والحصول على الاتجاهات.", long: true },
     "books.eyebrow": { label: "الملازم — عنوان صغير", default: "الملازم" },
     "books.title": { label: "الملازم — العنوان", default: "ملازم {name}" },
-    "books.desc": { label: "الملازم — الوصف", default: "ملازم اللغة العربية لطلبة السادس الإعدادي. اضغط على الملزمة أو اسحبها لتدويرها.", long: true },
+    "books.desc": { label: "الملازم — الوصف", default: "ملازم اللغة العربية لطلبة السادس الإعدادي. المس الملزمة لتتفاعل معك، واختر القسم الذي تريده.", long: true },
     "order.eyebrow": { label: "طلب الملزمة — عنوان صغير", default: "الوكلاء وأماكن البيع" },
     "order.title": { label: "طلب الملزمة — العنوان", default: "لطلب الملزمة" },
     "order.desc": { label: "طلب الملزمة — الوصف", default: "الملزمة متوفرة لدى الوكلاء في عدة محافظات. اختر محافظتك أو ابحث باسم المنطقة.", long: true },

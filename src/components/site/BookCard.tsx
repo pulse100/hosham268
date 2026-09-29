@@ -2,10 +2,11 @@ import { CheckCircle2, Eye, ShoppingBag } from "lucide-react";
 import { Book3D } from "./Book3D";
 import { Reveal } from "../ui/Reveal";
 import Link from "next/link";
+import { categoryOf } from "@/lib/books";
 import type { Book } from "@/lib/types";
 
 export function BookCard({ book }: { book: Book }) {
-  const meta = [book.grade, book.subject, book.academic_year].filter(Boolean) as string[];
+  const meta = [book.category ? categoryOf(book.category).label : null, book.grade, book.academic_year].filter(Boolean) as string[];
   const orderHref = book.order_url ?? "/#order";
   return (
     <article className="glass card-hover group flex h-full flex-col overflow-hidden">
@@ -31,7 +32,7 @@ export function BookCard({ book }: { book: Book }) {
 
 /** عرض مميز عندما تكون هناك ملزمة واحدة */
 export function FeaturedBook({ book }: { book: Book }) {
-  const meta = [book.grade, book.subject, book.academic_year].filter(Boolean) as string[];
+  const meta = [book.category ? categoryOf(book.category).label : null, book.grade, book.academic_year].filter(Boolean) as string[];
   const features = (book.features ?? "").split("\n").map((f) => f.trim()).filter(Boolean).slice(0, 3);
   const orderHref = book.order_url ?? "/#order";
   return (

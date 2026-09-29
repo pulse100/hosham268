@@ -47,6 +47,7 @@ export type Location = Row & {
 
 export type Book = Row & {
   slug: string;
+  category: string | null;
   title: string;
   subtitle: string | null;
   grade: string | null;

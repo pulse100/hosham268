@@ -53,6 +53,7 @@ export const seed: Omit<SiteData, "source" | "texts"> = {
     {
       id: "b1",
       slug: "mawsooat-almamouri-adab-2026",
+      category: "adab",
       title: "موسوعة المعموري",
       subtitle: "في الأدب والنصوص",
       grade: "السادس الإعدادي",
@@ -70,6 +71,11 @@ export const seed: Omit<SiteData, "source" | "texts"> = {
       sort_order: 1,
       is_active: true,
     },
+    { id: "b2", slug: "mawsooat-almamouri-qawaid-1", category: "qawaid", title: "موسوعة المعموري في القواعد", subtitle: "الجزء الأول", grade: "السادس الإعدادي", subject: "اللغة العربية — القواعد", academic_year: "2026", description: "ملزمة قواعد اللغة العربية لطلبة السادس الإعدادي بفرعيه العلمي والأدبي — الجزء الأول.", features: null, cover_image: null, publisher: "دار المغرب للملازم", order_phone: null, order_url: null, view_url: null, sort_order: 2, is_active: true },
+    { id: "b3", slug: "mawsooat-almamouri-qawaid-2", category: "qawaid", title: "موسوعة المعموري في القواعد", subtitle: "الجزء الثاني", grade: "السادس الإعدادي", subject: "اللغة العربية — القواعد", academic_year: "2026", description: "ملزمة قواعد اللغة العربية لطلبة السادس الإعدادي — الجزء الثاني.", features: null, cover_image: null, publisher: "دار المغرب للملازم", order_phone: null, order_url: null, view_url: null, sort_order: 3, is_active: true },
+    { id: "b4", slug: "wajibat-alqawaid-2026", category: "wajibat", title: "واجبات القواعد", subtitle: "تمارين وأسئلة", grade: "السادس الإعدادي", subject: "اللغة العربية — القواعد", academic_year: "2026", description: "ملزمة واجبات وتمارين القواعد لطلبة السادس الإعدادي بفرعيه العلمي والأدبي.", features: null, cover_image: null, publisher: "دار المغرب للملازم", order_phone: null, order_url: null, view_url: null, sort_order: 4, is_active: true },
+    { id: "b5", slug: "muraja-markaza-adab-2026", category: "muraja", title: "المراجعة المركزة", subtitle: "الأدب والنصوص", grade: "السادس الإعدادي", subject: "اللغة العربية — الأدب والنصوص", academic_year: "2026", description: "ملزمة المراجعة المركزة لمادة الأدب والنصوص لطلبة السادس الإعدادي.", features: null, cover_image: null, publisher: null, order_phone: null, order_url: null, view_url: null, sort_order: 5, is_active: true },
+    { id: "b6", slug: "wizariyat-alqawaid", category: "wizariyat", title: "وزاريات القواعد", subtitle: "الأسئلة الوزارية", grade: "السادس الإعدادي", subject: "اللغة العربية — القواعد", academic_year: null, description: "ملزمة الأسئلة الوزارية في قواعد اللغة العربية لطلبة السادس الإعدادي.", features: null, cover_image: null, publisher: null, order_phone: null, order_url: null, view_url: null, sort_order: 6, is_active: true },
   ],
 
   courses: [
@@ -138,7 +144,15 @@ export const seed: Omit<SiteData, "source" | "texts"> = {
   // أماكن بيع الملزمة — الرقم الوحيد الموثّق حالياً هو المطبوع على الغلاف.
   // أضف بقية الوكلاء (الاسم، المحافظة، العنوان، الأرقام) من «لوحة الإدارة ← الوكلاء».
   sellers: [
-    { id: "sl1", name: "دار المغرب للملازم", governorate: null, area: null, address: null, phone: "07710055555", phone2: null, whatsapp: null, map_url: null, telegram_url: null, books: "موسوعة المعموري في الأدب والنصوص", delivery: false, notes: "الناشر — الرقم المطبوع على غلاف الملزمة", sort_order: 1, is_active: true },
+    { id: "sl1", name: "مكتبة الربيعي", governorate: "بغداد", area: "البنوك", address: "شارع المشاتل، مقابل مشتل أبو علي", phone: "07703331873", phone2: null, whatsapp: null, map_url: null, telegram_url: "https://t.me/maktabtalrubaie", books: "موسوعة المعموري في الأدب والنصوص", delivery: true, notes: "وكيل دار المغرب — توصيل لجميع المحافظات", sort_order: 1, is_active: true },
+    { id: "sl2", name: "مكتبة سنتر المدينة (الربيعي 2)", governorate: "بغداد", area: "مدينة الصدر", address: "شارع الفلاح، قطاع 15", phone: "07734980888", phone2: null, whatsapp: null, map_url: null, telegram_url: null, books: null, delivery: true, notes: "الفرع الثاني لمكتبة الربيعي", sort_order: 2, is_active: true },
+    { id: "sl3", name: "مكتبة آدم", governorate: "بغداد", area: "المنصور", address: "شارع 14 رمضان، عمارة أبل، مقابل مطعم الساعة", phone: "07812190487", phone2: null, whatsapp: null, map_url: null, telegram_url: null, books: "موسوعة المعموري في القواعد", delivery: true, notes: "توصيل لجميع المحافظات", sort_order: 3, is_active: true },
+    { id: "sl4", name: "مكتبة آدم — فرع الكاظمية", governorate: "بغداد", area: "الكاظمية", address: "الشوصة، ساحة الزهراء، مجاور كراج الخيال", phone: "07812190487", phone2: null, whatsapp: null, map_url: null, telegram_url: null, books: null, delivery: true, notes: null, sort_order: 4, is_active: true },
+    { id: "sl5", name: "مكتبة فاضل الوكيل", governorate: "بغداد", area: "شارع المتنبي", address: "سوق السراي، فرع السراجين، قرب جسر الشهداء", phone: null, phone2: null, whatsapp: null, map_url: null, telegram_url: null, books: "موسوعة المعموري في الأدب والنصوص", delivery: false, notes: null, sort_order: 5, is_active: true },
+    { id: "sl6", name: "مكتبة أسامة — الفرع الأول", governorate: "كركوك", area: "شارع التربية القديم", address: "مقابل دائرة الضمان الاجتماعي", phone: "07701306054", phone2: null, whatsapp: null, map_url: null, telegram_url: null, books: "موسوعة المعموري", delivery: false, notes: "الوكيل الحصري لموسوعة المعموري في كركوك", sort_order: 6, is_active: true },
+    { id: "sl7", name: "مكتبة أسامة — الفرع الثاني", governorate: "كركوك", area: "طريق بغداد", address: "قرب محطة غرناطة", phone: "07764881314", phone2: null, whatsapp: null, map_url: null, telegram_url: null, books: "موسوعة المعموري", delivery: false, notes: null, sort_order: 7, is_active: true },
+    { id: "sl8", name: "مكتبة القبس", governorate: "كربلاء", area: "حي الموظفين", address: "شارع الحوانيت", phone: "07801004015", phone2: "07702725522", whatsapp: null, map_url: null, telegram_url: null, books: "ملازم الأستاذ هشام المعموري", delivery: false, notes: null, sort_order: 8, is_active: true },
+    { id: "sl9", name: "دار المغرب للملازم", governorate: null, area: null, address: null, phone: "07710055555", phone2: null, whatsapp: null, map_url: null, telegram_url: null, books: "ملازم الأستاذ هشام المعموري", delivery: false, notes: "الناشر — الرقم المطبوع على غلاف الملزمة", sort_order: 9, is_active: true },
   ],
 
   customSections: [],
