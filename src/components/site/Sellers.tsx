@@ -20,7 +20,8 @@ const tokensOf = (q: string) =>
  * يكتب الطالب «بغداد البنوك» أو «البنوك» أو «الحلة» فتظهر المكاتب مباشرة،
  * وإذا ما موجود مكتب بالمنطقة نفسها تظهر مكاتب نفس المحافظة ثم مكاتب التوصيل.
  */
-export function Sellers({ sellers, kind = "books" }: { sellers: Seller[]; kind?: "books" | "platform" }) {
+export function Sellers({ sellers, kind = "books", openLabel }: { sellers: Seller[]; kind?: "books" | "platform"; openLabel?: string }) {
+  const [open, setOpen] = useState(!openLabel);
   const one = kind === "books" ? "مكان بيع" : "وكيل";
   const many = kind === "books" ? "أماكن بيع" : "وكلاء";
   const [q, setQ] = useState("");
@@ -85,6 +86,16 @@ export function Sellers({ sellers, kind = "books" }: { sellers: Seller[]; kind?:
   const collapsed = result.mode === "all" && !showAll && full.length > LIMIT;
   const shown = collapsed ? full.slice(0, LIMIT) : full;
 
+  if (!open)
+    return (
+      <div className="text-center">
+        <button type="button" onClick={() => setOpen(true)} className="btn-primary !px-8 !py-4 text-base shadow-glow">
+          <Search className="h-5 w-5" /> {openLabel}
+        </button>
+        <p className="mt-3 text-sm text-rose/50">{sellers.length} {kind === "books" ? "مكتبة" : "وكيل"} — اكتب منطقتك وتطلعلك الأقرب</p>
+      </div>
+    );
+
   return (
     <div>
       <div className="relative mx-auto mb-4 max-w-2xl">
@@ -94,6 +105,7 @@ export function Sellers({ sellers, kind = "books" }: { sellers: Seller[]; kind?:
           <input
             value={q}
             onChange={(e) => setQ(e.target.value)}
+            autoFocus={!!openLabel}
             onFocus={() => setFocus(true)}
             onBlur={() => setTimeout(() => setFocus(false), 150)}
             placeholder="اكتب محافظتك أو منطقتك… مثال: بغداد البنوك"

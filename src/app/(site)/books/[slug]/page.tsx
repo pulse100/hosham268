@@ -69,7 +69,7 @@ export default async function BookPage({ params }: Props) {
       </section>
       <section className="container pb-24">
         <h2 className="mb-6 text-2xl font-bold text-white md:text-3xl">{texts["order.title"]}</h2>
-        <Sellers sellers={sellers} />
+        <Sellers sellers={sellers} openLabel="اطلب الملزمة" />
       </section>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
     </>

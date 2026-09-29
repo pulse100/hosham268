@@ -58,7 +58,7 @@ export default async function HomePage() {
       <section id="order" className="section">
         <div className="container">
           <SectionHeading eyebrow={t["order.eyebrow"]} title={t["order.title"]} description={t["order.desc"]} />
-          <Sellers sellers={data.sellers} />
+          <Sellers sellers={data.sellers} openLabel="اطلب الملزمة" />
         </div>
       </section>
 

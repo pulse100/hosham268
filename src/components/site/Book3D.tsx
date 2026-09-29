@@ -49,7 +49,7 @@ export function Book3D({ book, priority = false, className }: { book: Book; prio
       >
         <motion.div
           ref={ref}
-          className="relative touch-none"
+          className="relative touch-manipulation"
           style={{ rotateY, rotateX, z, transformStyle: "preserve-3d" }}
           onPointerMove={(e) => { track(e); if (push.get() === 0) push.set(e.pointerType === "mouse" ? 0.25 : 0); }}
           onPointerDown={(e) => {

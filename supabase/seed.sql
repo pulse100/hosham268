@@ -24,14 +24,11 @@ insert into public.hm_locations (name, area, address, lat, lng, is_approximate, 
 insert into public.hm_books (slug, category, title, subtitle, grade, subject, academic_year, description, features, cover_image, publisher, order_phone, order_url, view_url, sort_order, is_active) values
   ('mawsooat-almamouri-adab-2026', 'adab', 'موسوعة المعموري', 'في الأدب والنصوص', 'السادس الإعدادي', 'اللغة العربية — الأدب والنصوص', '2027', 'تحتوي الملزمة على أسئلة موافقة لنمط الأسئلة والأفكار الوزارية، مع نظام التعليق الصوتي عبر الباركودات المرفقة مع كل موضوع.', 'أسئلة موافقة لنمط الأسئلة والأفكار الوزارية
 نظام التعليق الصوتي: قراءة السؤال وسماعه في الوقت نفسه عبر الباركود
-صياغة الأسئلة من قبل الأستاذ هشام المعموري', '/images/cover-adab-2027.webp', 'دار المغرب للملازم', '07710055555', null, null, 1, true),
+صياغة الأسئلة من قبل الأستاذ هشام المعموري', '/images/cover-adab-2027-v2.webp', 'دار المغرب للملازم', '07710055555', null, null, 1, true),
   ('mawsooat-almamouri-qawaid-1', 'qawaid', 'موسوعة المعموري', 'في قواعد اللغة العربية — الجزء الأول', 'السادس الإعدادي', 'اللغة العربية — القواعد', '2027', 'ملزمة قواعد اللغة العربية لطلبة السادس الإعدادي — الجزء الأول، إعداد وتنظيم الأستاذ هشام المعموري.', null, '/images/cover-qawaid-1-2027.webp', 'دار المغرب للملازم', null, null, null, 2, true),
-  ('mawsooat-almamouri-qawaid-2', 'qawaid', 'موسوعة المعموري في القواعد', 'الجزء الثاني', 'السادس الإعدادي', 'اللغة العربية — القواعد', '2026', 'ملزمة قواعد اللغة العربية لطلبة السادس الإعدادي — الجزء الثاني.', null, null, 'دار المغرب للملازم', null, null, null, 3, true),
   ('wajibat-alqawaid-2026', 'wajibat', 'خوارزميات المعموري', 'في واجبات قواعد اللغة العربية — الجزء الأول', 'السادس الإعدادي', 'اللغة العربية — واجبات القواعد', '2027', 'واجبات ذكية مبنية على تحليل أنماط الأسئلة الوزارية.', 'أسلوب الاستفهام
 أسلوب النفي
-أسلوب التقديم والتأخير', '/images/cover-wajibat-1-2027.webp', 'دار المغرب للملازم', null, null, null, 4, true),
-  ('muraja-markaza-adab-2026', 'muraja', 'المراجعة المركزة', 'الأدب والنصوص', 'السادس الإعدادي', 'اللغة العربية — الأدب والنصوص', '2026', 'ملزمة المراجعة المركزة لمادة الأدب والنصوص لطلبة السادس الإعدادي.', null, null, null, null, null, null, 5, true),
-  ('wizariyat-alqawaid', 'wizariyat', 'وزاريات القواعد', 'الأسئلة الوزارية', 'السادس الإعدادي', 'اللغة العربية — القواعد', null, 'ملزمة الأسئلة الوزارية في قواعد اللغة العربية لطلبة السادس الإعدادي.', null, null, null, null, null, null, 6, true);
+أسلوب التقديم والتأخير', '/images/cover-wajibat-1-2027.webp', 'دار المغرب للملازم', null, null, null, 3, true);
 
 insert into public.hm_courses (title, grade, course_type, academic_year, description, status, register_url, sort_order, is_active) values
   ('الدورات الحضورية', 'السادس الإعدادي — علمي وأدبي', 'in_person', null, 'دروس حضورية في معاهد بغداد المذكورة في قسم أماكن التدريس.', 'contact', null, 1, true),

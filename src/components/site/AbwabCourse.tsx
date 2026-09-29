@@ -86,7 +86,7 @@ export function AbwabCourse({ texts: t, agents }: { texts: Record<string, string
 
         <div id="abwab-agents" className="mt-16 scroll-mt-28">
           <SectionHeading eyebrow={t["abwab.agents_eyebrow"]} title={t["abwab.agents_title"]} description={t["abwab.agents_desc"]} />
-          <Sellers sellers={agents} kind="platform" />
+          <Sellers sellers={agents} kind="platform" openLabel="اعرض وكلاء منصة أبواب" />
         </div>
       </div>
     </section>

@@ -22,8 +22,8 @@ export function BookCard({ book }: { book: Book }) {
         </h3>
         {book.description && <p className="mt-3 line-clamp-3 text-sm leading-7 text-rose/65">{book.description}</p>}
         <div className="mt-auto grid grid-cols-2 gap-2 pt-6">
-          <Link href={book.view_url ?? `/books/${book.slug}`} className="btn-ghost"><Eye className="h-4 w-4" /> عرض الملزمة</Link>
-          <a href={orderHref} className="btn-primary"><ShoppingBag className="h-4 w-4" /> لطلب الملزمة</a>
+          <Link href={book.view_url ?? `/books/${book.slug}`} className="btn-ghost whitespace-nowrap !px-3 text-sm"><Eye className="h-4 w-4" /> عرض الملزمة</Link>
+          <a href={orderHref} className="btn-primary whitespace-nowrap !px-3 text-sm"><ShoppingBag className="h-4 w-4" /> لطلب الملزمة</a>
         </div>
       </div>
     </article>

@@ -66,7 +66,7 @@ export const seed: Omit<SiteData, "source" | "texts"> = {
         "تحتوي الملزمة على أسئلة موافقة لنمط الأسئلة والأفكار الوزارية، مع نظام التعليق الصوتي عبر الباركودات المرفقة مع كل موضوع.",
       features:
         "أسئلة موافقة لنمط الأسئلة والأفكار الوزارية\nنظام التعليق الصوتي: قراءة السؤال وسماعه في الوقت نفسه عبر الباركود\nصياغة الأسئلة من قبل الأستاذ هشام المعموري",
-      cover_image: "/images/cover-adab-2027.webp",
+      cover_image: "/images/cover-adab-2027-v2.webp",
       publisher: "دار المغرب للملازم",
       order_phone: "07710055555",
       order_url: null,
@@ -75,10 +75,7 @@ export const seed: Omit<SiteData, "source" | "texts"> = {
       is_active: true,
     },
     { id: "b2", slug: "mawsooat-almamouri-qawaid-1", category: "qawaid", title: "موسوعة المعموري", subtitle: "في قواعد اللغة العربية — الجزء الأول", grade: "السادس الإعدادي", subject: "اللغة العربية — القواعد", academic_year: "2027", description: "ملزمة قواعد اللغة العربية لطلبة السادس الإعدادي — الجزء الأول، إعداد وتنظيم الأستاذ هشام المعموري.", features: null, cover_image: "/images/cover-qawaid-1-2027.webp", publisher: "دار المغرب للملازم", order_phone: null, order_url: null, view_url: null, sort_order: 2, is_active: true },
-    { id: "b3", slug: "mawsooat-almamouri-qawaid-2", category: "qawaid", title: "موسوعة المعموري في القواعد", subtitle: "الجزء الثاني", grade: "السادس الإعدادي", subject: "اللغة العربية — القواعد", academic_year: "2026", description: "ملزمة قواعد اللغة العربية لطلبة السادس الإعدادي — الجزء الثاني.", features: null, cover_image: null, publisher: "دار المغرب للملازم", order_phone: null, order_url: null, view_url: null, sort_order: 3, is_active: true },
-    { id: "b4", slug: "wajibat-alqawaid-2026", category: "wajibat", title: "خوارزميات المعموري", subtitle: "في واجبات قواعد اللغة العربية — الجزء الأول", grade: "السادس الإعدادي", subject: "اللغة العربية — واجبات القواعد", academic_year: "2027", description: "واجبات ذكية مبنية على تحليل أنماط الأسئلة الوزارية.", features: "أسلوب الاستفهام\nأسلوب النفي\nأسلوب التقديم والتأخير", cover_image: "/images/cover-wajibat-1-2027.webp", publisher: "دار المغرب للملازم", order_phone: null, order_url: null, view_url: null, sort_order: 4, is_active: true },
-    { id: "b5", slug: "muraja-markaza-adab-2026", category: "muraja", title: "المراجعة المركزة", subtitle: "الأدب والنصوص", grade: "السادس الإعدادي", subject: "اللغة العربية — الأدب والنصوص", academic_year: "2026", description: "ملزمة المراجعة المركزة لمادة الأدب والنصوص لطلبة السادس الإعدادي.", features: null, cover_image: null, publisher: null, order_phone: null, order_url: null, view_url: null, sort_order: 5, is_active: true },
-    { id: "b6", slug: "wizariyat-alqawaid", category: "wizariyat", title: "وزاريات القواعد", subtitle: "الأسئلة الوزارية", grade: "السادس الإعدادي", subject: "اللغة العربية — القواعد", academic_year: null, description: "ملزمة الأسئلة الوزارية في قواعد اللغة العربية لطلبة السادس الإعدادي.", features: null, cover_image: null, publisher: null, order_phone: null, order_url: null, view_url: null, sort_order: 6, is_active: true },
+    { id: "b4", slug: "wajibat-alqawaid-2026", category: "wajibat", title: "خوارزميات المعموري", subtitle: "في واجبات قواعد اللغة العربية — الجزء الأول", grade: "السادس الإعدادي", subject: "اللغة العربية — واجبات القواعد", academic_year: "2027", description: "واجبات ذكية مبنية على تحليل أنماط الأسئلة الوزارية.", features: "أسلوب الاستفهام\nأسلوب النفي\nأسلوب التقديم والتأخير", cover_image: "/images/cover-wajibat-1-2027.webp", publisher: "دار المغرب للملازم", order_phone: null, order_url: null, view_url: null, sort_order: 3, is_active: true },
   ],
 
   courses: [
