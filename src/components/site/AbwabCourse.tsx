@@ -62,8 +62,8 @@ export function AbwabCourse({ texts: t, agents }: { texts: Record<string, string
 
         {box.length > 0 && (
           <div className="glass mt-6 grid items-center gap-6 overflow-hidden p-6 md:grid-cols-[1fr_1.2fr] md:p-8">
-            <div className="relative aspect-[790/470] overflow-hidden rounded-2xl bg-white/5">
-              <Image src="/images/abwab-box.webp" alt={t["abwab.box_title"]} fill sizes="(min-width: 768px) 40vw, 90vw" className="object-cover" />
+            <div className="relative mx-auto aspect-[3/4] w-full max-w-sm overflow-hidden rounded-2xl bg-white/5">
+              <Image src={t["abwab.image"] || "/images/abwab-teacher.webp"} alt={t["abwab.box_title"]} fill sizes="(min-width: 768px) 24rem, 90vw" className="object-cover object-[center_30%]" />
             </div>
             <div>
               <h3 className="mb-4 flex items-center gap-2 font-display text-xl font-bold text-white"><Gift className="h-5 w-5 text-gold" /> {t["abwab.box_title"]}</h3>

@@ -78,6 +78,7 @@ export const TEXT_GROUPS: { group: string; items: Record<string, TextDef> }[] = 
     "abwab.plans_title": { label: "الاشتراكات — العنوان", default: "أنواع الاشتراكات على منصة أبواب" },
     "abwab.plans": { label: "الاشتراكات (سطر لكل اشتراك: السعر | الوصف)", long: true, default: "350 ألف | اشتراك محاضرات وامتحانات إلكترونية بالكامل\n400 ألف | اشتراك محاضرات إلكترونية + امتحانات إلكترونية وحضورية\n500 ألف | اشتراك محاضرات إلكترونية + امتحانات حضورية اثنان" },
     "abwab.box_title": { label: "بوكس الأوائل — العنوان", default: "بوكس الأوائل مجاناً هدية مع كل اشتراك منهج كامل" },
+    "abwab.image": { label: "صورة قسم البوكس (رابط الصورة)", default: "/images/abwab-teacher.webp" },
     "abwab.box": { label: "محتويات البوكس (سطر لكل ملزمة)", long: true, default: "ملزمة القواعد الجزء الأول\nملزمة الأدب والنصوص\nملزمة الأساسيات\nملزمة التربية الإسلامية" },
     "abwab.contact_label": { label: "نص الحجز المباشر", default: "للحجز مباشرة من المنصة:" },
     "abwab.whatsapp": { label: "رقم WhatsApp المنصة", default: "07736167798" },
