@@ -29,6 +29,7 @@ export function Book3D({ book, priority = false, className }: { book: Book; prio
   const glareY = useTransform(spy, [-0.5, 0.5], ["20%", "80%"]);
   const glare = useTransform([glareX, glareY], ([x, y]: string[]) => `radial-gradient(circle at ${x} ${y}, rgba(255,255,255,.45), transparent 55%)`);
   const ref = useRef<HTMLDivElement>(null);
+  const [imgFailed, setImgFailed] = useState(false);
   const [ripple, setRipple] = useState<{ x: number; y: number; k: number } | null>(null);
 
   const track = (e: React.PointerEvent) => {
@@ -63,8 +64,8 @@ export function Book3D({ book, priority = false, className }: { book: Book; prio
         >
           {/* الغلاف */}
           <div className="relative aspect-[1563/2313] overflow-hidden rounded-[3px_8px_8px_3px] bg-wine shadow-[inset_-4px_0_8px_rgba(0,0,0,.35)]" style={{ transform: "translateZ(6px)" }}>
-            {book.cover_image ? (
-              <Image src={book.cover_image} alt={`غلاف ملزمة ${book.title}`} fill sizes="260px" priority={priority} draggable={false} className="pointer-events-none object-cover" />
+            {book.cover_image && !imgFailed ? (
+              <Image src={book.cover_image} alt={`غلاف ملزمة ${book.title}`} fill sizes="260px" priority={priority} draggable={false} onError={() => setImgFailed(true)} className="pointer-events-none object-cover" />
             ) : (
               <GeneratedCover book={book} />
             )}
